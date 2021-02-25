@@ -26,14 +26,14 @@ VALUES
 
 INSERT INTO role (id, title, salary, department_id)
 VALUES
-    (1, 'Cardiologist', '$351,827 per year', 1),
-    (2, 'Anesthesiologist', '$326,296 per year', 6),
-    (3, 'Orthodontist', '$264,850 per year', 2),
-    (4, 'Psychiatrist', '$224,577 per year', 9),
-    (5, 'Surgeon', '$216,248 per year', 7),
-    (6, 'Periodontist', '$214,896 per year', 3),
-    (7, 'Physician', '$202,387 per year', 3),
-    (8, 'Dentist', '$196,417 per year', 9),
-    (9, 'Internal medicine physician', '$194,938 per year', 5),
-    (10, 'Obstetrician', '$191,931 per year', 5),
-    (11, 'Nurse anesthetist', '$185,856 per year', 2);
+    (1, 'Cardiologist', '351827', 1),
+    (2, 'Anesthesiologist', '326296', 6),
+    (3, 'Orthodontist', '264850', 2),
+    (4, 'Psychiatrist', '224577', 9),
+    (5, 'Surgeon', '216248', 7),
+    (6, 'Periodontist', '214896', 3),
+    (7, 'Physician', '202387', 3),
+    (8, 'Dentist', '196417', 9),
+    (9, 'Internal medicine physician', '194938', 5),
+    (10, 'Obstetrician', '191931', 5),
+    (11, 'Nurse anesthetist', '185856', 2);
