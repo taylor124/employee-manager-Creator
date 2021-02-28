@@ -1,4 +1,6 @@
 const inquirer = require('inquirer');
+const department = require('./department');
+const employee = require('./employee');
 
 const roleQuery = {
     askRole: () => {
@@ -23,11 +25,16 @@ const roleQuery = {
         )
     },
     viewRoles: (connection) => {
-        return connection.query(
-            `SELECT department.id, name, role.department_id, role.title
-            FROM department
-                LEFT JOIN role ON role.department_id = department.id;
-                `);
+        return connection.query(`
+            SELECT 
+            role.title, 
+            role.id,
+            name AS department, 
+            role.salary
+            FROM role
+            LEFT JOIN department
+            ON role.department_id = department.id;
+            `);
     }
 }
 

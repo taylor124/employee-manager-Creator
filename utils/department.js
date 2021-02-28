@@ -1,4 +1,6 @@
 const inquirer = require('inquirer');
+const role = require('./role');
+const employee = require('./employee');
 
 const departmentQuery = {
     askDepartment: () => {

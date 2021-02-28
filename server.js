@@ -5,7 +5,6 @@ const department = require('./utils/department');
 const role = require('./utils/role');
 const employee = require('./utils/employee');
 const util = require('util');
-const { type } = require('os');
 
 
 
@@ -20,67 +19,60 @@ const connection = mysql.createConnection({
   database: 'employeeTracker_db'
 });
 
-connection.query = util.promisify(connection.query)
-const startQuery = () => {
-inquirer
-  .prompt(
-    [{
-      name: 'toDo',
-      message: 'What would you like to do?',
-      type: 'list',
-      choices: ['View all departments', 'Add a department']
-    }]
-  ).then(answers => {
-    switch (answers.toDo) {
-      case 'View all departments':
-        department.viewDepartments(connection).then(results => {
-          console.log('\n')
-          console.table(results); // results contains rows returned by server
-          startQuery();
-        })
-        break;
-      case 'Add a department':
-        department.askDepartment().then(depAnswers => {
-          console.log(depAnswers)
-          department.addDepartment(connection, depAnswers.depName).then(results =>{
-            console.log(results);
-            continueRoleQuery();
-          })
-        })
-        break;
-    }
-  });
-};
+connection.query = util.promisify(connection.query);
 
-const continueRoleQuery = () => {
+const startQuery = () => {
   inquirer
     .prompt(
       [{
-        name: 'toDoRole',
+        name: 'toDo',
         message: 'What would you like to do?',
         type: 'list',
-        choices: ['View all roles', 'Add a title']
+        choices:
+          [/*'Add an Employee',
+            'Remove an Employee',
+            'Update an Employee',
+            'Add a Role',
+            'Add a Department',*/
+            'View all Roles',
+            'View all Employees',
+            'View all Employees by Manager',
+            'View all Employees by Department']
       }]
     ).then(answers => {
-      switch (answers.toDoRole) {
-        case 'View all roles':
+      switch (answers.toDo) {
+        case 'View all Employees':
+          employee.viewEmployees(connection).then(results => {
+            console.log('\n')
+            console.table(results); // results contains rows returned by server
+            startQuery();
+          })
+          break;
+        case 'View all Employees by Manager':
+          employee.employeesByManager(connection).then(results => {
+            console.log('\n')
+            console.table(results); // results contains rows returned by server
+            startQuery();
+          })
+          break;
+        case 'View all Employees by Department':
+          employee.employeesByDepartment(connection).then(results => {
+            console.log('\n')
+            console.table(results); // results contains rows returned by server
+            startQuery();
+          })
+          break;
+        case 'View all Roles':
           role.viewRoles(connection).then(results => {
             console.log('\n')
             console.table(results); // results contains rows returned by server
-            continueRoleQuery();
+            startQuery();
           })
           break;
-          case 'Add title and salary':
-            role.askRole().then(roleAnswers => {
-              console.log(roleAnswers)
-              role.addRole(connection, roleAnswers.roleName).then(results =>{
-                console.log(results);
-                startQuery();
-              })
-            })
-            break;
       }
     });
-  };
+};
+
+
 
 startQuery();
