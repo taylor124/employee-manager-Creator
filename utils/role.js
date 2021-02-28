@@ -8,20 +8,25 @@ const roleQuery = {
             .prompt(
                 [{
                     name: 'roleName',
-                    message: 'Title?'
-                }]
+                    message: 'Title Name?',
+                    type: 'input'
+                },
+                {
+                    name: 'roleSalary',
+                    message: 'Annual Salary',
+                    type: 'input'
+                },
+                {
+                    name: 'departmentRole',
+                    message: 'What department does it belong to'
+                }
+                ]
             )
     },
-    addRole: (connection, roleTitle) => {
+    addRole: (connection, roleTitle, roleSalary, departmentRole) => {
         return connection.query(
-            `INSERT INTO role (title) VALUES (?)`,
-            [roleTitle]
-        )
-    },
-    addSalary: (connection, roleSalary) => {
-        return connection.query(
-            `INSERT INTO role (salary) VALUES (?)`,
-            [roleSalary]
+            `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`,
+            [roleTitle, roleSalary, departmentRole]
         )
     },
     viewRoles: (connection) => {

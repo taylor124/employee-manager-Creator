@@ -12,12 +12,14 @@ const departmentQuery = {
                 }]
             )
     },
+
     addDepartment: (connection, departmentName) => {
         return connection.query(
             `INSERT INTO department (name) VALUES (?)`,
             [departmentName]
         )
     },
+
     viewDepartments: (connection) => {
         return connection.query(
             `SELECT department.id, name, role.department_id, role.title

@@ -5,29 +5,57 @@ const employeeQuery = {
         return inquirer
             .prompt(
                 [{
-                    name: 'employeeName',
-                    message: 'Name of the Employee?',
+                    name: 'employeeFirstName',
+                    message: 'First Name?',
                     type: 'input'
-                }]
+                },
+                {
+                    name: 'employeeLastName',
+                    message: 'Last Name?',
+                    type: 'input'
+                },
+                {
+                    name: 'employeeRole',
+                    message: 'Role of the Employee?',
+                    type: 'input'
+                },
+                {
+                    name: 'managerId',
+                    message: 'What is the Manager id?',
+                    type: 'input'
+                }
+                ]
             )
     },
 
-    employeesByManager: (connection) = async () => {
-        inquirer
+    addEmployee: (connection, employeeFirstName, employeeLastName, employeeRole, managerId) => {
+        return connection.query(
+            `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`,
+            [employeeFirstName, employeeLastName, employeeRole, managerId]
+        )
+    },
+
+    updateEmployee: (connection, employeeId, roleId) => {
+        return connection.query(
+            'UPDATE employee SET role_id = ? WHERE id = ?;',
+            [roleId, employeeId]
+        )
+    },
+    askEmployeeUpdate: () => {
+        return inquirer
             .prompt(
                 [{
-                    name: `managerName`,
-                    message: 'View Employees by which Manager?',
-                    type: 'list',
-                    choices: []
+                    name: 'employeeId',
+                    message: 'What is the Employees Id?',
+                    type: 'number'
+                },
+                {
+                    name: 'roleId',
+                    message: 'What is the new role?',
+                    type: 'number'
                 }]
             )
     },
-
-    employeesByDepartment: (connection) => {
-        return connection.query(`SELECT * FROM employee;`);
-    },
-
     viewEmployees: (connection) => {
         return connection.query(`
         SELECT
@@ -41,7 +69,7 @@ const employeeQuery = {
       FROM
         employee e
       LEFT JOIN role 
-          ON role.id = e.id
+          ON e.role_id = role.id
       LEFT JOIN department
           ON role.department_id = department.id
       LEFT JOIN employee m

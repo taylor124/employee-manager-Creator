@@ -5,6 +5,7 @@ const department = require('./utils/department');
 const role = require('./utils/role');
 const employee = require('./utils/employee');
 const util = require('util');
+const { addDepartment } = require('./utils/department');
 
 
 
@@ -29,15 +30,13 @@ const startQuery = () => {
         message: 'What would you like to do?',
         type: 'list',
         choices:
-          [/*'Add an Employee',
-            'Remove an Employee',
+          ['Add an Employee',
             'Update an Employee',
             'Add a Role',
-            'Add a Department',*/
+            'Add a Department',
+            'View all Departments',
             'View all Roles',
-            'View all Employees',
-            'View all Employees by Manager',
-            'View all Employees by Department']
+            'View all Employees']
       }]
     ).then(answers => {
       switch (answers.toDo) {
@@ -48,7 +47,7 @@ const startQuery = () => {
             startQuery();
           })
           break;
-        case 'View all Employees by Manager':
+        /*case 'View all Employees by Manager':
           employee.employeesByManager(connection).then(results => {
             console.log('\n')
             console.table(results); // results contains rows returned by server
@@ -61,7 +60,7 @@ const startQuery = () => {
             console.table(results); // results contains rows returned by server
             startQuery();
           })
-          break;
+          break;*/
         case 'View all Roles':
           role.viewRoles(connection).then(results => {
             console.log('\n')
@@ -69,8 +68,55 @@ const startQuery = () => {
             startQuery();
           })
           break;
+        case 'Add a Department':
+          department.askDepartment().then(answers => {
+            department.addDepartment(connection, answers.depName).then(
+              results => {
+                console.log(results)
+                startQuery()
+              }
+            )
+
+          })
+          break;
+        case 'Add a Role':
+          role.askRole().then(answers => {
+            role.addRole(connection, answers.roleName, answers.roleSalary, answers.departmentRole).then(
+              results => {
+                console.log(results)
+                startQuery()
+              }
+            )
+          })
+          break;
+          case 'Add an Employee':
+          employee.askEmployee().then(answers => {
+            employee.addEmployee(connection, answers.employeeFirstName, answers.employeeLastName, answers.employeeRole, answers.managerId).then(
+              results => {
+                console.log(results)
+                startQuery()
+              }
+            )
+          }).catch(err => console.log(err))
+          break;
+          case 'View all Departments':
+          department.viewDepartments(connection).then(results => {
+            console.log('\n')
+            console.table(results); // results contains rows returned by server
+            startQuery();
+          })
+          break;
+        case 'Update an Employee':
+          employee.askEmployeeUpdate().then(answers => {
+            employee.updateEmployee(connection, answers.employeeId, answers.roleId).then(results => {
+              console.log(results)
+              startQuery();
+            })
+          })
+          break;
       }
-    });
+    }
+    )
 };
 
 
